@@ -4,11 +4,18 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
+
+// Containers
 import HomeScreen from "./containers/HomeScreen";
 import ProfileScreen from "./containers/ProfileScreen";
+
 import SignInScreen from "./containers/SignInScreen";
 import SignUpScreen from "./containers/SignUpScreen";
 import SettingsScreen from "./containers/SettingsScreen";
+import RoomScreen from "./containers/RoomScreen";
+
+// Components
+import Logo from "./components/Logo.js";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -48,91 +55,88 @@ export default function App() {
         // No token found, user isn't signed in
         <Stack.Navigator>
           <Stack.Screen
+            name="SignUp"
+            options={{ header: () => null, animationEnabled: false }}
+          >
+            {(props) => <SignUpScreen {...props} setToken={setToken} />}
+          </Stack.Screen>
+          <Stack.Screen
             name="SignIn"
             options={{ header: () => null, animationEnabled: false }}
           >
             {() => <SignInScreen setToken={setToken} />}
           </Stack.Screen>
-          <Stack.Screen name="SignUp">
-            {() => <SignUpScreen setToken={setToken} />}
-          </Stack.Screen>
         </Stack.Navigator>
       ) : (
         // User is signed in
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Tab"
-            options={{ header: () => null, animationEnabled: false }}
+
+        <Tab.Navigator
+          tabBarOptions={{
+            activeTintColor: "tomato",
+            inactiveTintColor: "gray",
+          }}
+        >
+          <Tab.Screen
+            name="Home"
+            options={{
+              tabBarLabel: "Home",
+              tabBarIcon: ({ color, size }) => (
+                <Ionicons name={"ios-home"} size={size} color={color} />
+              ),
+            }}
           >
             {() => (
-              <Tab.Navigator
-                tabBarOptions={{
-                  activeTintColor: "tomato",
-                  inactiveTintColor: "gray",
-                }}
-              >
-                <Tab.Screen
+              <Stack.Navigator>
+                <Stack.Screen
                   name="Home"
                   options={{
-                    tabBarLabel: "Home",
-                    tabBarIcon: ({ color, size }) => (
-                      <Ionicons name={"ios-home"} size={size} color={color} />
-                    ),
+                    headerTitle: () => <Logo />,
                   }}
                 >
-                  {() => (
-                    <Stack.Navigator>
-                      <Stack.Screen
-                        name="Home"
-                        options={{
-                          title: "My App",
-                          headerStyle: { backgroundColor: "red" },
-                          headerTitleStyle: { color: "white" },
-                        }}
-                      >
-                        {() => <HomeScreen />}
-                      </Stack.Screen>
+                  {(props) => <HomeScreen {...props} />}
+                </Stack.Screen>
 
-                      <Stack.Screen
-                        name="Profile"
-                        options={{
-                          title: "User Profile",
-                        }}
-                      >
-                        {() => <ProfileScreen />}
-                      </Stack.Screen>
-                    </Stack.Navigator>
-                  )}
-                </Tab.Screen>
-                <Tab.Screen
-                  name="Settings"
+                <Stack.Screen
+                  name="Room"
                   options={{
-                    tabBarLabel: "Settings",
-                    tabBarIcon: ({ color, size }) => (
-                      <Ionicons
-                        name={"ios-options"}
-                        size={size}
-                        color={color}
-                      />
-                    ),
+                    title: "User Room",
                   }}
                 >
-                  {() => (
-                    <Stack.Navigator>
-                      <Stack.Screen
-                        name="Settings"
-                        options={{ title: "Settings", tabBarLabel: "Settings" }}
-                      >
-                        {() => <SettingsScreen setToken={setToken} />}
-                      </Stack.Screen>
-                    </Stack.Navigator>
-                  )}
-                </Tab.Screen>
-              </Tab.Navigator>
+                  {(props) => <RoomScreen {...props} />}
+                </Stack.Screen>
+              </Stack.Navigator>
             )}
-          </Stack.Screen>
-        </Stack.Navigator>
+          </Tab.Screen>
+          <Tab.Screen
+            name="Settings"
+            options={{
+              tabBarLabel: "Settings",
+              tabBarIcon: ({ color, size }) => (
+                <Ionicons name={"ios-options"} size={size} color={color} />
+              ),
+            }}
+          >
+            {() => (
+              <Stack.Navigator>
+                <Stack.Screen
+                  name="Settings"
+                  options={{ title: "Settings", tabBarLabel: "Settings" }}
+                >
+                  {() => <SettingsScreen setToken={setToken} />}
+                </Stack.Screen>
+              </Stack.Navigator>
+            )}
+          </Tab.Screen>
+        </Tab.Navigator>
       )}
     </NavigationContainer>
   );
+}
+
+// Commented portions of code:
+
+{
+  /* <Stack.Screen name="SignUp">
+  {() => <SignUpScreen setToken={setToken} />}
+</Stack.Screen>; */
 }

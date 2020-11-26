@@ -14,7 +14,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import axios from "axios";
 
 // export default function SignUpScreen({ setToken }) {
-export default function SignUpScreen() {
+export default function SignUpScreen({ setToken }) {
   // States declaration one for each text input to inform
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
@@ -53,7 +53,7 @@ export default function SignUpScreen() {
           console.log(response.data);
           if (response.data.token) {
             alert("TOUT EST OK");
-            // setToken(response.data.token);
+            setToken(response.data.token);
           } else {
             alert("An error occurred");
           }
@@ -120,6 +120,7 @@ export default function SignUpScreen() {
               placeholder="Password"
               blurOnSubmit={false}
               onSubmitEditing={() => Keyboard.dismiss()}
+              textContentType="oneTimeCode"
               secureTextEntry={true}
               value={password}
               style={styles.TextInput}
@@ -129,6 +130,9 @@ export default function SignUpScreen() {
             />
             <TextInput
               placeholder="Confirm Password"
+              placeholder="Password"
+              blurOnSubmit={false}
+              onSubmitEditing={() => Keyboard.dismiss()}
               secureTextEntry={true}
               style={styles.TextInput}
               value={confirmPassword}
