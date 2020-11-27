@@ -100,6 +100,7 @@ export default function App() {
                   name="Room"
                   options={{
                     title: "User Room",
+                    headerTitle: () => <Logo />,
                   }}
                 >
                   {(props) => <RoomScreen {...props} />}
